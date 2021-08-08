@@ -1,0 +1,17 @@
+.DS_Store
+.dart_tool/
+.vscode/
+
+.packages
+.pub/
+
+build/
+
+libmupdf/libdartffiedmupdf.so
+libmupdf/mupdf/build
+libmupdf/mupdf/dart
+package_config.json
+# Files and directories created by pub
+.packages
+# If you're building an application, you may want to check-in your pubspec.lock
+pubspec.lock
