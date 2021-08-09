@@ -1,0 +1,3 @@
+[submodule "lib/src/libdecaf"]
+	path = lib/src/libdecaf
+	url = https://github.com/LucasPenido/libdecaf
