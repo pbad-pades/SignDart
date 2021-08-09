@@ -1,6 +1,4 @@
 import 'dart:ffi';
-import 'dart:io';
-import 'package:path/path.dart' as path;
 import '../libdecaf_generated_bindings.dart' show Libdecaf;
 import '../utils/path.dart';
 
