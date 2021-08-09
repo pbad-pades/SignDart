@@ -30,9 +30,8 @@ String locatePath()
   if (path.isEmpty) {
     var currentDirectory = Directory.current.path;
     var folders = currentDirectory.split('/');
-    var index = folders.length - 1;
-
     var indexOfPackage = folders.lastIndexOf('dartffiedlibdecaf');
+    
     if (indexOfPackage != -1) {
       folders = folders.sublist(0, indexOfPackage + 1);
       path = folders.join('/');
@@ -40,9 +39,9 @@ String locatePath()
   }
 
   if (Platform.isMacOS || Platform.isLinux)
-    return path + '/lib/src/libdecaf/src/libdecaf.so';
+    return path + '/lib/src/linux/libdecaf.so';
   else if (Platform.isWindows)
-    return path + '\\lib\\src\\libdecaf\\src\\libdecaf.so';
+    return path + '\\lib\\src\\linux\\libdecaf.so';
   else 
     return '';
 }
