@@ -29,6 +29,11 @@ After, run
 $ dart pub get
 ```    
 
+For the package to work correctly it is necessary to define a environment variable, DART_HOME, containing the path to the dart .pub-cache directory. Example:
+```
+$ export DART_HOME=$HOME/.pub-cache
+```
+
 At code, import the package with `import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';`
 
 After that it is possible to make the function calls normally. 

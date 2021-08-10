@@ -2,12 +2,19 @@ import 'dart:io';
 
 String locatePath()
 {
-  String home = "";
+  String? home;
   String path = "";
   Map<String, String> envVars = Platform.environment;
   if (Platform.isMacOS || Platform.isLinux) {
-    home = envVars['HOME'] ?? '';
-    path = home + '/.pub-cache/git';
+    home = envVars['DART_HOME'];
+
+    if (home == null) {
+      home = envVars['HOME'];
+      path = home! + '/.pub-cache/git';
+    } else {
+      path = home + '/git';
+    }
+
   } else if (Platform.isWindows) {
     home = envVars['UserProfile'] ?? '';
     path = home + '\\AppData\\Roaming\\Pub\\Cache\\git';
