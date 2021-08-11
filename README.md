@@ -4,19 +4,19 @@ This is a FFI interface to the libdecaf, a library for elliptic curve research a
 
 ## Building
 
-There's two ways to build this project
+There are two ways to build this project
 
 ### As local project
-In order to build you have to clone (or initialize later) git submodules, 
-this repository relies on multiple submodules. Recommended way to clone is:
+This repository relies on multiple submodules, so you have to clone (or initialize later) git submodules in order to build it. 
+The recommended way to clone is:
 
 ```
 git clone --recurse-submodules https://github.com/pbad-pades/dartffiedlibdecaf.git
 ```
 
 ### As dart package
-To use this project as dart package, will be necessary to add this repository as dependecy of `pubspec.yaml` using the cli branch.
-Recommended use SSH key, like:
+To use this project as dart package, it is necessary to add this repository as dependecy of `pubspec.yaml` using the cli branch.
+It is recommended to use SSH keys, like:
 
 ```
 dependencies:
