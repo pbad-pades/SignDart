@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';
 
 Future<void> main() async {
-  var privateKeyBytes = await File('./priv.txt').readAsBytes();
-  var publicKeyBytes = await File('./pub.txt').readAsBytes();
+  var privateKeyBytes = await File('./privKey448.txt').readAsBytes();
+  var publicKeyBytes = await File('./pubKey448.txt').readAsBytes();
 
   var message = 'Hello World!';
   var messageBytes = Uint8List.fromList(message.codeUnits);
