@@ -12,9 +12,10 @@ class Shake256 {
     this._hash.update(message);
   }
 
-  List<int> digest(int hashLen) {
+  Uint8List digest(int hashLen) {
     var h = this._hash.digest();
-    return h.sublist(0, hashLen);
+    this.reset();
+    return Uint8List.fromList(h.sublist(0, hashLen));
   }
 
   void reset() {

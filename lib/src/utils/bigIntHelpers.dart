@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 /// Decode a BigInt from bytes in big-endian encoding.
-BigInt decodeBigInt(List<int> bytes) {
+BigInt decodeBigInt(Uint8List bytes) {
   BigInt result = new BigInt.from(0);
   for (int i = 0; i < bytes.length; i++) {
     result += new BigInt.from(bytes[bytes.length - i - 1]) << (8 * i);

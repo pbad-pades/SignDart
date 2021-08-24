@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../curves/Curve.dart';
 import '../utils/bigIntHelpers.dart';
 
@@ -12,11 +14,11 @@ class Point {
     } 
   }
 
-  Point mul(s) {
-  s = decodeBigInt(s);
-  s = s % this.curve.order;
+  Point mul(Uint8List s) {
+  var bigIntS = decodeBigInt(s);
+  bigIntS = bigIntS % this.curve.order;
 
-  return this.curve.mul_point(s, this);
+  return this.curve.mul_point(bigIntS, this);
   }
 
 
