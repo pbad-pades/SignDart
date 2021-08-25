@@ -8,7 +8,7 @@ class Point {
   final BigInt y;
   Curve curve;
 
-  Point(BigInt this.x, BigInt this.y, Curve this.curve, [bool check = false]) {
+  Point(this.x, this.y, this.curve, [bool check = false]) {
     if (check && !curve.isOnCurve(this)) {
       throw Exception("Point not on curve");
     } 

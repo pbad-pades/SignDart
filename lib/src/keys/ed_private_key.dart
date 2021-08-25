@@ -11,9 +11,9 @@ class EdPrivateKey {
   late final Uint8List privateKey;
   final Curve curve;
 
-  EdPrivateKey.fromBytes(Uint8List this.privateKey, Curve this.curve);
+  EdPrivateKey.fromBytes(this.privateKey, this.curve);
 
-  EdPrivateKey.generate(Curve this.curve) {
+  EdPrivateKey.generate(this.curve) {
     final random = Random.secure();
     final values =
         List<int>.generate(curve.keySize, (_) => random.nextInt(256));
