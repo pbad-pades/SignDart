@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
-import '../curves/Curve.dart';
-import '../utils/bigIntHelpers.dart';
+import '../curves/curve.dart';
+import '../utils/big_int_helpers.dart';
 
 class Point {
   final BigInt x;
   final BigInt y;
   Curve curve;
 
-  Point(BigInt this.x, BigInt this.y, Curve this.curve, [bool check = false]) {
+  Point(this.x, this.y, this.curve, [bool check = false]) {
     if (check && !curve.isOnCurve(this)) {
       throw Exception("Point not on curve");
     } 
@@ -18,7 +18,7 @@ class Point {
   var bigIntS = decodeBigInt(s);
   bigIntS = bigIntS % this.curve.order;
 
-  return this.curve.mul_point(bigIntS, this);
+  return this.curve.mulPoint(bigIntS, this);
   }
 
 

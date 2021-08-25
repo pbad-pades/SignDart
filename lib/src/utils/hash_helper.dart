@@ -5,8 +5,7 @@ import 'package:sha3/sha3.dart';
 class Shake256 {
   SHA3 _hash = SHA3(256, SHAKE_PADDING, 1056);
 
-  Shake256() { 
-  }
+  Shake256();
 
   update(Uint8List message) {
     this._hash.update(message);

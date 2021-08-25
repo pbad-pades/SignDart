@@ -1,21 +1,22 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import '../curves/Curve.dart';
-import '../keys/EdPublicKey.dart';
-import '../utils/bigIntHelpers.dart';
-import '../utils/hashHelper.dart';
-import '../point/Point.dart';
+import '../curves/curve.dart';
+import '../keys/ed_public_key.dart';
+import '../point/point.dart';
+import '../utils/big_int_helpers.dart';
+import '../utils/hash_helper.dart';
 
 class EdPrivateKey {
-  late final Uint8List privateKey; 
+  late final Uint8List privateKey;
   final Curve curve;
 
-  EdPrivateKey.fromBytes(Uint8List this.privateKey, Curve this.curve);
+  EdPrivateKey.fromBytes(this.privateKey, this.curve);
 
-  EdPrivateKey.generate(Curve this.curve) {
+  EdPrivateKey.generate(this.curve) {
     final random = Random.secure();
-    final values = List<int>.generate(curve.keySize, (_) => random.nextInt(256));
+    final values =
+        List<int>.generate(curve.keySize, (_) => random.nextInt(256));
     this.privateKey = Uint8List.fromList(values);
   }
 
@@ -23,7 +24,7 @@ class EdPrivateKey {
     var publicKeyPoint = _getPrivateScalarAndPublicPointAndSignaturePrefix()[1];
 
     var pubKey = _encodePoint(publicKeyPoint);
-    
+
     return EdPublicKey.fromBytes(pubKey, curve);
   }
 
@@ -52,51 +53,49 @@ class EdPrivateKey {
     Uint8List s = result[0];
     Point A = result[1];
     Uint8List prefix = result[2];
-    
+
     Uint8List eA = _encodePoint(A);
 
-    Shake256 hasher = curve.hash;
-    var r;
+    Shake256 hash = curve.hash;
     Uint8List curveSigner;
 
-    if (curve.curveName == 'Ed521' ) {
+    if (curve.curveName == 'Ed521') {
       String m = 'SigEd521' + String.fromCharCodes([0x00, 0x00]);
       curveSigner = Uint8List.fromList(m.codeUnits);
-    }  else {
-      throw Exception("Curve not suported");
+    } else {
+      throw Exception("Curve not supported");
     }
-      
-    hasher.update(curveSigner);
-    hasher.update(prefix);
-    hasher.update(message);
-    r = hasher.digest(curve.signatureSize);
+
+    hash.update(curveSigner);
+    hash.update(prefix);
+    hash.update(message);
+    Uint8List r = hash.digest(curve.signatureSize);
 
     // Transform to Little Endian
     r = Uint8List.fromList(r.reversed.toList());
 
-    r = decodeBigInt(r);
-    r = r % order;
-    r = encodeBigInt(r, size);
+    BigInt rBigInt = decodeBigInt(r);
+    rBigInt = rBigInt % order;
+    r = encodeBigInt(rBigInt, size);
 
-    Point PointR = generator.mul(r);
+    Point pointR = generator.mul(r);
 
-    Uint8List R = _encodePoint(PointR);
+    Uint8List R = _encodePoint(pointR);
 
     // Compute S
-    hasher.update(curveSigner);
-    hasher.update(R);
-    hasher.update(eA);
-    hasher.update(message);
-    var k = hasher.digest(size);
+    hash.update(curveSigner);
+    hash.update(R);
+    hash.update(eA);
+    hash.update(message);
+    Uint8List k = hash.digest(size);
 
     // Transform to Little Endian
     k = Uint8List.fromList(k.reversed.toList());
-    var reducedK = decodeBigInt(k) % order;
+    BigInt reducedK = decodeBigInt(k) % order;
     Uint8List S = encodeBigInt(
-      (decodeBigInt(r) + (reducedK * decodeBigInt(s))) % order, 
-      curve.keySize
-    );
-    
+        (decodeBigInt(r) + (reducedK * decodeBigInt(s))) % order,
+        curve.keySize);
+
     // Transform to Little Endian
     S = Uint8List.fromList(S.reversed.toList());
 
@@ -112,13 +111,12 @@ class EdPrivateKey {
   }
 
   Uint8List _pruningBuffer(Uint8List a) {
-
     if (this.curve.curveName == 'Ed521') {
       a[0] &= 0xFC;
-      a[a.length-1] = 0;
-      a[a.length-2] |= 0x80;
+      a[a.length - 1] = 0;
+      a[a.length - 2] |= 0x80;
     } else {
-      throw Exception("Curve not suported");
+      throw Exception("Curve not supported");
     }
 
     return a;
@@ -126,14 +124,14 @@ class EdPrivateKey {
 
   Uint8List _encodePoint(Point point) {
     // Transform to Little Endian
-    var pubKey = Uint8List.fromList(encodeBigInt(point.y, this.curve.keySize).reversed.toList());
+    var pubKey = Uint8List.fromList(
+        encodeBigInt(point.y, this.curve.keySize).reversed.toList());
 
     // Encoding point
-    if (point.x&BigInt.one == BigInt.one) {
-      pubKey[pubKey.length-1] |= 0x80;
+    if (point.x & BigInt.one == BigInt.one) {
+      pubKey[pubKey.length - 1] |= 0x80;
     }
 
     return pubKey;
   }
-
 }
