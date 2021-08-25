@@ -1,6 +1,6 @@
-import '../utils/hashHelper.dart';
+import '../utils/hash_helper.dart';
 
-import '../point/Point.dart';
+import '../point/point.dart';
 
 abstract class Curve {
   late final String curveName;

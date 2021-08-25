@@ -4,12 +4,12 @@ import 'dart:math';
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
-import '../Errors/KeySizeException.dart';
-import '../utils/checkSize.dart';
+import '../errors/key_size_exception.dart';
+import '../utils/check_size.dart';
 import '../utils/ffi_libdecaf.dart';
 import '../utils/converter.dart';
 
-import 'Ed448PublicKey.dart';
+import 'ed448_public_key.dart';
 
 class Ed448PrivateKey {
   late Uint8List privateKey;

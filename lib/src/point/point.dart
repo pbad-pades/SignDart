@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import '../curves/Curve.dart';
-import '../utils/bigIntHelpers.dart';
+import '../curves/curve.dart';
+import '../utils/big_int_helpers.dart';
 
 class Point {
   final BigInt x;

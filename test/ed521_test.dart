@@ -1,7 +1,7 @@
 import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';
 import 'package:test/test.dart';
 
-import 'testVector.dart';
+import 'test_vector.dart';
 
 main() {
   group('Ed521', () {

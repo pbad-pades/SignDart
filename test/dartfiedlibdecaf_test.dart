@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';
-import './testVector.dart';
+import './test_vector.dart';
 
 void main() {
   group('Ed448', () {

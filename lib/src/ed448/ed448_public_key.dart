@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 import 'dart:ffi';
 
-import 'package:dartffiedlibdecaf/src/Errors/KeySizeException.dart';
-import 'package:dartffiedlibdecaf/src/Errors/SignatureSizeException.dart';
-import 'package:dartffiedlibdecaf/src/utils/checkSize.dart';
-import 'package:dartffiedlibdecaf/src/utils/ffi_libdecaf.dart';
+import '../errors/key_size_exception.dart';
+import '../errors/signature_size_exception.dart';
+import '../utils/check_size.dart';
+import '../utils/ffi_libdecaf.dart';
 
 import '../utils/converter.dart';
 

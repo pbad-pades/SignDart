@@ -1,7 +1,7 @@
-import '../utils/hashHelper.dart';
+import '../utils/hash_helper.dart';
 
-import '../curves/Curve.dart';
-import '../point/Point.dart';
+import '../curves/curve.dart';
+import '../point/point.dart';
 
 class TwistedEdwardCurve implements Curve {
   late final String curveName;

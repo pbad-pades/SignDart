@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import '../Errors/KeySizeException.dart';
-import '../curves/Curve.dart';
+import '../errors/key_size_exception.dart';
+import '../curves/curve.dart';
 
 class EdPublicKey {
   late final Uint8List publicKey; 
