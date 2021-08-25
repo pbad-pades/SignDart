@@ -5,3 +5,5 @@ analyzer:
     - example
     - lib/src/libdecaf
     - lib/src/libdecaf_generated_bindings.dart
+  errors:
+    unnecessary_this: ignore
