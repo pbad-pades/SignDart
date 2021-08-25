@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:dartffiedlibdecaf/src/utils/endianness.dart';
+
 import '../curves/curve.dart';
 import '../keys/ed_public_key.dart';
 import '../point/point.dart';
@@ -35,8 +37,7 @@ class EdPrivateKey {
 
     Uint8List a = _pruningBuffer(leftHalf);
 
-    // Transform to Little Endian
-    Uint8List s = Uint8List.fromList(a.reversed.toList());
+    Uint8List s = toLittleEndian(a);
     Point publicKeyPoint = this.curve.generator.mul(s);
 
     return [s, publicKeyPoint, rightHalf];
@@ -71,8 +72,7 @@ class EdPrivateKey {
     hash.update(message);
     Uint8List r = hash.digest(curve.signatureSize);
 
-    // Transform to Little Endian
-    r = Uint8List.fromList(r.reversed.toList());
+    r = toLittleEndian(r);
 
     BigInt rBigInt = decodeBigInt(r);
     rBigInt = rBigInt % order;
@@ -89,15 +89,13 @@ class EdPrivateKey {
     hash.update(message);
     Uint8List k = hash.digest(size);
 
-    // Transform to Little Endian
-    k = Uint8List.fromList(k.reversed.toList());
+    k = toLittleEndian(k);
     BigInt reducedK = decodeBigInt(k) % order;
     Uint8List S = encodeBigInt(
         (decodeBigInt(r) + (reducedK * decodeBigInt(s))) % order,
         curve.keySize);
 
-    // Transform to Little Endian
-    S = Uint8List.fromList(S.reversed.toList());
+    S = toLittleEndian(S);
 
     return Uint8List.fromList(R + S);
   }
@@ -122,10 +120,8 @@ class EdPrivateKey {
     return a;
   }
 
-  Uint8List _encodePoint(Point point) {
-    // Transform to Little Endian
-    var pubKey = Uint8List.fromList(
-        encodeBigInt(point.y, this.curve.keySize).reversed.toList());
+  Uint8List _encodePoint(Point point) { 
+    Uint8List pubKey = toLittleEndian(encodeBigInt(point.y, this.curve.keySize));
 
     // Encoding point
     if (point.x & BigInt.one == BigInt.one) {
