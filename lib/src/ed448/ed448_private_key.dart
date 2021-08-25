@@ -13,8 +13,8 @@ import 'ed448_public_key.dart';
 
 class Ed448PrivateKey {
   late Uint8List privateKey;
-  int _keySize = 57;
-  int _signatureSize = 114;
+  final int _keySize = 57;
+  final int _signatureSize = 114;
 
   final _libdecaf = FFILibDecaf();
 

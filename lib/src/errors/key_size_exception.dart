@@ -1,6 +1,6 @@
 class KeySizeException implements Exception {
-  String _message = 'The size of the key is wrong! It should be: ';
-  int _correctSize;
+  final String _message = 'The size of the key is wrong! It should be: ';
+  final int _correctSize;
 
   KeySizeException(this._correctSize);
 

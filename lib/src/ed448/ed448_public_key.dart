@@ -10,8 +10,8 @@ import '../utils/converter.dart';
 
 class Ed448PublicKey {
   Uint8List publicKey;
-  int _keySize = 57;
-  int _signatureSize = 114;
+  final int _keySize = 57;
+  final int _signatureSize = 114;
 
   final _libdecaf = FFILibDecaf();
 
