@@ -1,0 +1,7 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  exclude:
+    - example
+    - lib/src/libdecaf
+    - lib/src/libdecaf_generated_bindings.dart
