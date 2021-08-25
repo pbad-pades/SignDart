@@ -57,7 +57,6 @@ class EdPrivateKey {
     Uint8List eA = _encodePoint(A);
 
     Shake256 hash = curve.hash;
-    var r;
     Uint8List curveSigner;
 
     if (curve.curveName == 'Ed521') {
@@ -70,14 +69,14 @@ class EdPrivateKey {
     hash.update(curveSigner);
     hash.update(prefix);
     hash.update(message);
-    r = hash.digest(curve.signatureSize);
+    Uint8List r = hash.digest(curve.signatureSize);
 
     // Transform to Little Endian
     r = Uint8List.fromList(r.reversed.toList());
 
-    r = decodeBigInt(r);
-    r = r % order;
-    r = encodeBigInt(r, size);
+    BigInt rBigInt = decodeBigInt(r);
+    rBigInt = rBigInt % order;
+    r = encodeBigInt(rBigInt, size);
 
     Point pointR = generator.mul(r);
 
@@ -88,11 +87,11 @@ class EdPrivateKey {
     hash.update(R);
     hash.update(eA);
     hash.update(message);
-    var k = hash.digest(size);
+    Uint8List k = hash.digest(size);
 
     // Transform to Little Endian
     k = Uint8List.fromList(k.reversed.toList());
-    var reducedK = decodeBigInt(k) % order;
+    BigInt reducedK = decodeBigInt(k) % order;
     Uint8List S = encodeBigInt(
         (decodeBigInt(r) + (reducedK * decodeBigInt(s))) % order,
         curve.keySize);
