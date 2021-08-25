@@ -32,11 +32,11 @@ class Ed448PublicKey {
       throw new SignatureSizeException(_signatureSize);
     }
 
-    final FFISignature = toUint8ListPointer(signature);
-    final FFIMessage = toUint8ListPointer(message);
-    final FFIPublicKey = toUint8ListPointer(this.publicKey);
+    final ffiSignature = toUint8ListPointer(signature);
+    final ffiMessage = toUint8ListPointer(message);
+    final ffiPublicKey = toUint8ListPointer(this.publicKey);
 
-    final isValid = _libdecaf.decaf_ed448_verify(FFISignature, FFIPublicKey, FFIMessage, message.length, 0, nullptr, 0);
+    final isValid = _libdecaf.decaf_ed448_verify(ffiSignature, ffiPublicKey, ffiMessage, message.length, 0, nullptr, 0);
   
     return isValid == -1 ? true : false;
   }

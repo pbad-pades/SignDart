@@ -15,5 +15,5 @@ abstract class Curve {
   late final int signatureSize;
 
   bool isOnCurve(Point P);
-  Point mul_point(BigInt k, Point P);
+  Point mulPoint(BigInt k, Point P);
 }

@@ -38,26 +38,26 @@ class Ed448PrivateKey {
   }
 
   Ed448PublicKey publicKey() {
-    final FFIPublicKey = calloc<Uint8>(_keySize);
-    final FFIPrivateKey = toUint8ListPointer(this.privateKey);
+    final ffiPublicKey = calloc<Uint8>(_keySize);
+    final ffiPrivateKey = toUint8ListPointer(this.privateKey);
 
-    _libdecaf.decaf_ed448_derive_public_key(FFIPublicKey, FFIPrivateKey);
+    _libdecaf.decaf_ed448_derive_public_key(ffiPublicKey, ffiPrivateKey);
 
-    var publicKey = Uint8List.fromList(FFIPublicKey.asTypedList(_keySize));
+    var publicKey = Uint8List.fromList(ffiPublicKey.asTypedList(_keySize));
     return Ed448PublicKey.fromBytes(publicKey);
   }
 
   /// Signs a message [message] and returns a signature.
   Uint8List sign(Uint8List message) {
-    final FFIMessage = toUint8ListPointer(message);
+    final ffiMessage = toUint8ListPointer(message);
     final publicKey = this.publicKey();
-    final FFIPublicKey = toUint8ListPointer(publicKey.getPublicKey);
-    final FFIPrivateKey = toUint8ListPointer(this.privateKey);
-    final FFISignature = malloc<Uint8>(_signatureSize);
+    final ffiPublicKey = toUint8ListPointer(publicKey.getPublicKey);
+    final ffiPrivateKey = toUint8ListPointer(this.privateKey);
+    final ffiSignature = malloc<Uint8>(_signatureSize);
 
-    _libdecaf.decaf_ed448_sign(FFISignature, FFIPrivateKey, FFIPublicKey, FFIMessage, message.length, 0, nullptr, 0);
+    _libdecaf.decaf_ed448_sign(ffiSignature, ffiPrivateKey, ffiPublicKey, ffiMessage, message.length, 0, nullptr, 0);
 
-    final signature = Uint8List.fromList(FFISignature.asTypedList(_signatureSize));
+    final signature = Uint8List.fromList(ffiSignature.asTypedList(_signatureSize));
     return signature;
   }
 

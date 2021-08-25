@@ -79,9 +79,9 @@ class EdPrivateKey {
     r = r % order;
     r = encodeBigInt(r, size);
 
-    Point PointR = generator.mul(r);
+    Point pointR = generator.mul(r);
 
-    Uint8List R = _encodePoint(PointR);
+    Uint8List R = _encodePoint(pointR);
 
     // Compute S
     hash.update(curveSigner);

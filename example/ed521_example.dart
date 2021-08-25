@@ -9,7 +9,7 @@ main() async {
 
   var message = Uint8List.fromList([0x03]);
 
-  var ed521 = TwistedEdwardCurve.Ed521();
+  var ed521 = TwistedEdwardCurve.ed521();
 
   var privateKey = EdPrivateKey.generate(ed521);
   // or

@@ -18,7 +18,7 @@ class Point {
   var bigIntS = decodeBigInt(s);
   bigIntS = bigIntS % this.curve.order;
 
-  return this.curve.mul_point(bigIntS, this);
+  return this.curve.mulPoint(bigIntS, this);
   }
 
 
