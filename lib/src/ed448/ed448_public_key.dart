@@ -19,7 +19,7 @@ class Ed448PublicKey {
     if (checkEd448KeySize(publicKey)) {
       this.publicKey = publicKey;
     } else {
-      throw new KeySizeException(_keySize);
+      throw KeySizeException(_keySize);
     }
   }
 
@@ -29,7 +29,7 @@ class Ed448PublicKey {
 
   bool verify(Uint8List signature, Uint8List message) {
     if (!checkEd448SignatureSize(signature)) {
-      throw new SignatureSizeException(_signatureSize);
+      throw SignatureSizeException(_signatureSize);
     }
 
     final ffiSignature = toUint8ListPointer(signature);

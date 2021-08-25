@@ -11,7 +11,7 @@ class EdPublicKey {
     if (publicKey.length == curve.keySize) {
       this.publicKey = publicKey;
     } else {
-      throw new KeySizeException(curve.keySize);
+      throw KeySizeException(curve.keySize);
     }
   }
 }

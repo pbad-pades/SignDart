@@ -22,7 +22,7 @@ class Ed448PrivateKey {
     if (checkEd448KeySize(privateKey)) {
       this.privateKey = privateKey;
     } else {
-      throw new KeySizeException(_keySize);
+      throw KeySizeException(_keySize);
     }
   }
 
