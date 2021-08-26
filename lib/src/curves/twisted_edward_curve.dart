@@ -81,6 +81,47 @@ class TwistedEdwardCurve implements Curve {
   }
 
   @override
+  Point addPoint(Point P, Point Q) {
+    var q = this.field;
+    var a = this.a;
+    List<BigInt> result;
+    BigInt x, y, z, t;
+
+    if (P == Q) {
+      result = this._aff2ext(P.x, P.y, q);
+      var px = result[0], py = result[1], pz = result[2], pt = result[3];
+
+      result = this._dblExt(px, py, pz, pt, q, a);
+      x = result[0];
+      y = result[1];
+      z = result[2];
+      t = result[3];
+    } else {
+      result = this._aff2ext(P.x, P.y, q);
+      var px = result[0], py = result[1], pz = result[2], pt = result[3];
+
+      result = this._aff2ext(Q.x, Q.y, q);
+      var qx = result[0], qy = result[1], qz = result[2], qt = result[3];
+
+      result = this._addExt(px, py, pz, pt, qx, qy, qz, qt, q, a);
+      x = result[0];
+      y = result[1];
+      z = result[2];
+      t = result[3];
+    }
+
+    if (z > BigInt.zero) {
+      result = this._ext2aff(x, y, z, t, q);
+      x = result[0];
+      y = result[1];
+
+      return Point(x, y, this);
+    } else {
+      return Point(BigInt.zero, BigInt.zero, this, false);
+    }
+  }
+
+  @override
   Point mulPoint(BigInt k, Point P) {
     var q = this.field;
     var coefficientA = this.a;
@@ -128,6 +169,63 @@ class TwistedEdwardCurve implements Curve {
     }
 
     return Point(BigInt.zero, BigInt.zero, this, false);
+  }
+
+  @override
+  Uint8List encodePoint(Point point) {
+    Uint8List pubKey = toLittleEndian(encodeBigInt(point.y, keySize));
+
+    // Encoding point
+    if (point.x & BigInt.one == BigInt.one) {
+      pubKey[pubKey.length - 1] |= 0x80;
+    }
+
+    return pubKey;
+  }
+
+  @override
+  Point decodePoint(Uint8List encodedPoint) {
+    var eP = Uint8List.fromList(encodedPoint);
+    var size = eP.length;
+    var sign = eP[size - 1] & 0x80;
+    eP[size - 1] &= ~0x80;
+
+    var y = decodeBigInt(toLittleEndian(eP));
+    var x = _xRecover(y, sign);
+
+    return Point(x, y, this);
+  }
+
+  BigInt _xRecover(BigInt y, int sign) {
+    var field = this.field;
+    var a = this.a;
+    var d = this.d;
+
+    if (sign > 0) {
+      sign = 1;
+    }
+
+    var yy = (y * y) % field;
+    var u = (BigInt.one - yy) % field;
+    var v = (a - d * yy).modPow(field - BigInt.two, field);
+    var xx = (u * v) % field;
+    BigInt x;
+
+    if (this.curveName == 'Ed521') {
+      x = xx.modPow((field + BigInt.one) ~/ BigInt.from(4), field);
+    } else {
+      throw Exception("Curve not supported");
+    }
+
+    if ((x & BigInt.one).compareTo(BigInt.from(sign)) != 0) {
+      x = field - x;
+    }
+
+    if ((x * x) % field != xx) {
+      throw Exception("X could not be recovered");
+    }
+
+    return x;
   }
 
   List<BigInt> _aff2ext(BigInt x, BigInt y, BigInt q) {

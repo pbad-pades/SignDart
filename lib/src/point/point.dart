@@ -21,8 +21,8 @@ class Point {
     return this.curve.mulPoint(bigIntS, this);
   }
 
-  void add(Point Q) {
-    this.curve.addPoint(this, Q);
+  Point add(Point Q) {
+    return this.curve.addPoint(this, Q);
   }
 
   @override
