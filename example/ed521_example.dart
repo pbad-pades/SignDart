@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';
 
 main() async {
-  var privateKeyBytes = await File('example/privKey521.txt').readAsBytes();
-  var publicKeyBytes = await File('example/pubKey521.txt').readAsBytes();
+  var privateKeyBytes = await File('privKey521.txt').readAsBytes();
+  var publicKeyBytes = await File('pubKey521.txt').readAsBytes();
 
   var message = Uint8List.fromList([0x03]);
 
@@ -20,4 +20,8 @@ main() async {
   var publicKey = EdPublicKey.fromBytes(publicKeyBytes, ed521);
   //or
   publicKey = privateKey.getPublicKey();
+
+  var isValid = publicKey.verify(message, signature);
+
+  print(isValid ? 'Is valid' : 'Is not valid');
 }
