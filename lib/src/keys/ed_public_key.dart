@@ -48,7 +48,7 @@ class EdPublicKey {
     hash.update(this.publicKey);
     hash.update(message);
 
-    Uint8List k = hash.digest(curve.signatureSize);
+    Uint8List k = hash.digest(size);
     k = toLittleEndian(k);
 
     var kBigInt = decodeBigInt(k);
