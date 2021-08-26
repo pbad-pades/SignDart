@@ -24,14 +24,16 @@ String locatePath()
   for (var file in files) {
     path = file.path;
     var dir = "";
-    if (Platform.isMacOS || Platform.isLinux)
+    if (Platform.isMacOS || Platform.isLinux) {
       dir = path.split('/').last.split('-')[0];
-    else if (Platform.isWindows)
+    } else if (Platform.isWindows) {
       dir = path.split('\\').last.split('-')[0];
-    if (dir == 'dartffiedlibdecaf')
+    }
+    if (dir == 'dartffiedlibdecaf') {
       break;
-    else
+    } else {
       path = '';
+    }
   }
 
   if (path.isEmpty) {
@@ -45,10 +47,11 @@ String locatePath()
     }  
   }
 
-  if (Platform.isMacOS || Platform.isLinux)
+  if (Platform.isMacOS || Platform.isLinux) {
     return path + '/lib/src/linux/libdecaf.so';
-  else if (Platform.isWindows)
+  } else if (Platform.isWindows) {
     return path + '\\lib\\src\\linux\\libdecaf.so';
-  else 
+  } else {
     return '';
+  }
 }
