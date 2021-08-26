@@ -1,5 +1,6 @@
-import '../utils/hash_helper.dart';
+import 'dart:typed_data';
 
+import '../utils/hash_helper.dart';
 import '../point/point.dart';
 
 abstract class Curve {
@@ -34,4 +35,7 @@ abstract class Curve {
 
   bool isOnCurve(Point P);
   Point mulPoint(BigInt k, Point P);
+  Uint8List encodePoint(Point point);
+  Point decodePoint(Uint8List encodedPoint);
+  Point addPoint(Point point, Point Q);
 }

@@ -25,7 +25,7 @@ class EdPrivateKey {
   EdPublicKey getPublicKey() {
     var publicKeyPoint = _getPrivateScalarAndPublicPointAndSignaturePrefix()[1];
 
-    var pubKey = _encodePoint(publicKeyPoint);
+    var pubKey = curve.encodePoint(publicKeyPoint);
 
     return EdPublicKey.fromBytes(pubKey, curve);
   }
@@ -55,7 +55,7 @@ class EdPrivateKey {
     Point A = result[1];
     Uint8List prefix = result[2];
 
-    Uint8List eA = _encodePoint(A);
+    Uint8List eA = curve.encodePoint(A);
 
     Shake256 hash = curve.hash;
     Uint8List curveSigner;
@@ -80,7 +80,7 @@ class EdPrivateKey {
 
     Point pointR = generator.mul(r);
 
-    Uint8List R = _encodePoint(pointR);
+    Uint8List R = curve.encodePoint(pointR);
 
     // Compute S
     hash.update(curveSigner);
@@ -118,16 +118,5 @@ class EdPrivateKey {
     }
 
     return a;
-  }
-
-  Uint8List _encodePoint(Point point) { 
-    Uint8List pubKey = toLittleEndian(encodeBigInt(point.y, this.curve.keySize));
-
-    // Encoding point
-    if (point.x & BigInt.one == BigInt.one) {
-      pubKey[pubKey.length - 1] |= 0x80;
-    }
-
-    return pubKey;
   }
 }
