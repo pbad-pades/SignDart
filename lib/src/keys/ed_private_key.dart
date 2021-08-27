@@ -1,8 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:dartffiedlibdecaf/src/utils/endianness.dart';
-
+import '../utils/endianness.dart';
 import '../curves/curve.dart';
 import '../keys/ed_public_key.dart';
 import '../point/point.dart';
