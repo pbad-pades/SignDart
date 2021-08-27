@@ -1,5 +1,4 @@
-import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';
-import 'package:dartffiedlibdecaf/src/curves/curve.dart';
+import 'package:signdart/signdart.dart';
 import 'package:test/test.dart';
 
 import 'test_vector.dart';
