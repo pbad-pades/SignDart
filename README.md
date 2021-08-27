@@ -1,17 +1,16 @@
-# dartffiedlibdecaf
+# signdart
 
-This is a FFI interface to the libdecaf, a library for elliptic curve research and practical application.
+This is a pure Dart library for elliptic curve research and practical application.
 
 ## Building
 
 There are two ways to build this project
 
 ### As local project
-This repository relies on multiple submodules, so you have to clone (or initialize later) git submodules in order to build it. 
 The recommended way to clone is:
 
 ```
-git clone --recurse-submodules https://github.com/pbad-pades/dartffiedlibdecaf.git
+git clone git@github.com:pbad-pades/SignDart.git
 ```
 
 ### As dart package
@@ -22,33 +21,28 @@ It is recommended to use SSH keys, like:
 dependencies:
   dartffiedlibdecaf:
     git:
-      url: git@github.com:pbad-pades/dartffiedlibdecaf.git
+      url: https://github.com/pbad-pades/SignDart.git
 ```
 After, run 
 ```
 $ dart pub get
 ```    
 
-For the package to work correctly it is necessary to define a environment variable, DART_HOME, containing the path to the dart .pub-cache directory. Example:
-```
-$ export DART_HOME=$HOME/.pub-cache
-```
+At code, import the package with `import 'package:signdart/signdart.dart';`
 
-At code, import the package with `import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';`
-
-After that it is possible to make the function calls normally. 
+After that it is possible to use the library normally. 
 
 ## examples/
 
 You will find a set of examples.
 
-### example/main.dart
+### example/ed521_example.dart
 
-This example sign and verify a message using a pregenerated private key.
-OBS: Do not use the private key for any other purpose.
+This example create a public and private key, sign and verify a message using the Ed521 algorithm.
+OBS: Do not use the private key give for any other purpose.
 
 Usage:   
 At example directory
 ```
-dart main.dart
+dart ed521_example.dart
 ```

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dartffiedlibdecaf/dartffiedlibdecaf.dart';
+import 'package:signdart/signdart.dart';
 
 main() async {
   var privateKeyBytes = await File('privKey521.txt').readAsBytes();
