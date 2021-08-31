@@ -242,7 +242,9 @@ class TwistedEdwardCurve implements Curve {
     var xx = (u * v) % field;
     BigInt x;
 
-    if (this.curveName == 'Ed521') {
+    if (this.curveName == 'Ed448') {
+      x = xx.modPow((field + BigInt.one) ~/ BigInt.from(4), field);
+    } else if (this.curveName == 'Ed521') {
       x = xx.modPow((field + BigInt.one) ~/ BigInt.from(4), field);
     } else {
       throw Exception("Curve not supported");
