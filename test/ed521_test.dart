@@ -8,16 +8,16 @@ main() {
 
   group('Ed521', () {
     test('Test Ed521', () {
-      for (var i = 0; i < edd521PrivateKeyVector.length; i++) {
-        var privateKey = EdPrivateKey.fromBytes(edd521PrivateKeyVector[i], ed521);
+      for (var i = 0; i < ed521PrivateKeyVector.length; i++) {
+        var privateKey = EdPrivateKey.fromBytes(ed521PrivateKeyVector[i], ed521);
         var publicKey = privateKey.getPublicKey();
-        var publicKeyToCheck = edd521PublicKeyVector[i];
+        var publicKeyToCheck = ed521PublicKeyVector[i];
 
         expect(publicKeyToCheck, publicKey.publicKey);
 
         var message = messageVector[i];
         var signature = privateKey.sign(message);
-        var signatureToCheck = edd521SignatureVector[i];
+        var signatureToCheck = ed521SignatureVector[i];
 
         expect(signatureToCheck, signature);
 
