@@ -36,7 +36,10 @@ class EdPublicKey {
     Shake256 hash = curve.hash;
     Uint8List curveSigner;
 
-    if (curve.curveName == 'Ed521') {
+    if (curve.curveName == 'Ed448') {
+      String m = 'SigEd448' + String.fromCharCodes([0x00, 0x00]);
+      curveSigner = Uint8List.fromList(m.codeUnits);
+    } else if (curve.curveName == 'Ed521') {
       String m = 'SigEd521' + String.fromCharCodes([0x00, 0x00]);
       curveSigner = Uint8List.fromList(m.codeUnits);
     } else {
