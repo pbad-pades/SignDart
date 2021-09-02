@@ -6,14 +6,14 @@ import 'package:test/test.dart';
 import 'test_vector.dart';
 
 main() {
-  group('Ed521', () {
-    late Curve ed521;
+  group('Ed448', () {
+    late Curve ed448;
 
     setUp(() {
-      ed521 = TwistedEdwardCurve.ed521();
+      ed448 = TwistedEdwardCurve.ed448();
     });
 
-    group('Test Ed521', () {
+    group('Test Ed448 from RFC 8032', () {
       late Uint8List message;
       late Uint8List privateKeyBytes;
       late Uint8List publicKeyBytes;
@@ -23,17 +23,17 @@ main() {
       late EdPublicKey publicKey;
       late Uint8List signature;
 
-      for (var i = 0; i < ed521PrivateKeyVector.length; i++) {
+      for (var i = 0; i < ed448PrivateKeyVector.length; i++) {
         setUp(() {
           message = messageVector[i];
-          publicKeyBytes = ed521PublicKeyVector[i];
-          privateKeyBytes = ed521PrivateKeyVector[i];
-          signatureBytes = ed521SignatureVector[i];
+          publicKeyBytes = ed448PublicKeyVector[i];
+          privateKeyBytes = ed448PrivateKeyVector[i];
+          signatureBytes = ed448SignatureVector[i];
         });
 
         group('Test $i', () {
           test('Test public and private keys', () {
-            privateKey = EdPrivateKey.fromBytes(privateKeyBytes, ed521);
+            privateKey = EdPrivateKey.fromBytes(privateKeyBytes, ed448);
             publicKey = privateKey.getPublicKey();
             expect(publicKeyBytes, publicKey.publicKey);
           });
@@ -49,26 +49,43 @@ main() {
           });
 
           test('Verifying fails when using different public key', () {
-              EdPublicKey differentPublicKey = EdPublicKey.fromBytes(
-                  ed521PublicKeyVector[
-                      (i + 1) % (ed521PublicKeyVector.length - 1)],
-                  ed521);
-              bool isSignatureValid =
-                  differentPublicKey.verify(message, signature);
-              expect(isSignatureValid, false);
+            EdPublicKey differentPublicKey = EdPublicKey.fromBytes(
+                ed448PublicKeyVector[
+                    (i + 1) % (ed448PublicKeyVector.length - 1)],
+                ed448);
+            bool isSignatureValid =
+                differentPublicKey.verify(message, signature);
+            expect(isSignatureValid, false);
+          });
+
+          test('Verifying fails when using different message', () {
+            Uint8List differentMessage =
+                Uint8List.fromList([(i + 1) % (messageVector.length - 1)]);
+            bool isSignatureValid =
+                publicKey.verify(differentMessage, signature);
+            expect(isSignatureValid, false);
+          });
+
+          test('Verifying fails when using different signature', () {
+            Uint8List differentSignature = ed448SignatureVector[
+                (i + 1) % (ed448SignatureVector.length - 1)];
+            bool isSignatureValid =
+                publicKey.verify(message, differentSignature);
+            expect(isSignatureValid, false,
+                reason: ed448SignatureVector.length.toString());
           });
         });
       }
     });
 
     test('Test random private keys', () {
-      int keySize = 66;
+      int keySize = 57;
       int signatureSize = keySize * 2;
 
       for (var i = 0; i < 100; i++) {
         for (var j = 0; j < messageVector.length; j++) {
           Uint8List message = messageVector[j];
-          EdPrivateKey privateKey = EdPrivateKey.generate(ed521);
+          EdPrivateKey privateKey = EdPrivateKey.generate(ed448);
           EdPublicKey publicKey = privateKey.getPublicKey();
 
           expect(privateKey.privateKey.length, keySize);
@@ -94,6 +111,7 @@ main() {
           isValid = publicKey.verify(message, differentSignature);
 
           expect(isValid, false);
+
         }
       }
     });

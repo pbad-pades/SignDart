@@ -39,6 +39,37 @@ class TwistedEdwardCurve implements Curve {
   @override
   late final int signatureSize;
 
+  TwistedEdwardCurve.ed448() {
+    this.curveName = "Ed448";
+
+    this.field = BigInt.parse(
+        '726838724295606890549323807888004534353641360687318060281490199180612328166730772686396383698676545930088884461843637361053498018365439');
+
+    this.order = BigInt.parse(
+        '181709681073901722637330951972001133588410340171829515070372549795146003961539585716195755291692375963310293709091662304773755859649779');
+
+    this.a = BigInt.from(0x01);
+
+    this.d = BigInt.parse(
+        '726838724295606890549323807888004534353641360687318060281490199180612328166730772686396383698676545930088884461843637361053498018326358');
+
+    this.generator = Point(
+        BigInt.parse(
+            '224580040295924300187604334099896036246789641632564134246125461686950415467406032909029192869357953282578032075146446173674602635247710'),
+        BigInt.parse(
+            '298819210078481492676017930443930673437544040154080242095928241372331506189835876003536878655418784733982303233503462500531545062832660'),
+        this,
+        false);
+
+    this.cofactor = 0x04;
+
+    this.hash = Shake256();
+
+    this.keySize = 57;
+
+    this.signatureSize = keySize * 2;
+  }
+
   TwistedEdwardCurve.ed521() {
     this.curveName = 'Ed521';
 
@@ -211,7 +242,9 @@ class TwistedEdwardCurve implements Curve {
     var xx = (u * v) % field;
     BigInt x;
 
-    if (this.curveName == 'Ed521') {
+    if (this.curveName == 'Ed448') {
+      x = xx.modPow((field + BigInt.one) ~/ BigInt.from(4), field);
+    } else if (this.curveName == 'Ed521') {
       x = xx.modPow((field + BigInt.one) ~/ BigInt.from(4), field);
     } else {
       throw Exception("Curve not supported");
