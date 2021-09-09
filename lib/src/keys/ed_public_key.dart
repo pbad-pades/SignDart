@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../errors/signature_size_exception.dart';
 import '../point/point.dart';
 import '../utils/big_int_helpers.dart';
 import '../utils/endianness.dart';
@@ -21,17 +22,21 @@ class EdPublicKey {
   }
 
   bool verify(Uint8List message, Uint8List signature) {
+    if (signature.length != this.curve.signatureSize) {
+      throw SignatureSizeException(this.curve.signatureSize);
+    }
+
     Curve curve = this.curve;
     BigInt order = curve.order;
-    int size = curve.signatureSize;
+    int signatureSize = curve.signatureSize;
+    Uint8List A = this.publicKey;
 
-    List<Uint8List> result = _decodeSignature(signature);
+    Uint8List R = signature.sublist(0, signatureSize >> 1);
 
-    Uint8List eR = result[0];
-    Uint8List S = result[1];
+    Uint8List S = toLittleEndian(signature.sublist(signatureSize >> 1));
 
-    eR = toLittleEndian(eR);
-    Point R = curve.decodePoint(eR);
+    Point pointR = curve.decodePoint(R);
+    Point pointA = curve.decodePoint(A);
 
     Shake256 hash = curve.hash;
     Uint8List curveSigner;
@@ -47,38 +52,20 @@ class EdPublicKey {
     }
 
     hash.update(curveSigner);
-    hash.update(eR);
-    hash.update(this.publicKey);
+    hash.update(R);
+    hash.update(A);
     hash.update(message);
 
-    Uint8List k = hash.digest(size);
+    Uint8List k = hash.digest(signatureSize);
     k = toLittleEndian(k);
 
-    var kBigInt = decodeBigInt(k);
+    BigInt reducedK = decodeBigInt(k) % order;
+    k = encodeBigInt(reducedK, curve.keySize);
 
-    kBigInt = kBigInt % order;
+    Point left = pointA.mul(k).add(pointR);
 
-    var A = this.publicKey;
-    var pA = curve.decodePoint(A);
-
-    k = encodeBigInt(kBigInt, curve.keySize);
-
-    var left = pA.mul(k).add(R);
-    var right = curve.generator.mul(S);
+    Point right = curve.generator.mul(S);
 
     return left == right;
-  }
-
-  List<Uint8List> _decodeSignature(Uint8List signature) {
-    int l = signature.length;
-    if (l & 1 != 0) {
-      return [Uint8List(0), Uint8List(0)];
-    }
-    l = l >> 1;
-
-    var R = toLittleEndian(signature.sublist(0, l));
-    var S = toLittleEndian(signature.sublist(l));
-
-    return [R, S];
   }
 }

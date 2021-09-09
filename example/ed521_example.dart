@@ -4,24 +4,24 @@ import 'dart:typed_data';
 import 'package:signdart/signdart.dart';
 
 main() async {
-  var privateKeyBytes = await File('privKey521.txt').readAsBytes();
-  var publicKeyBytes = await File('pubKey521.txt').readAsBytes();
+  Uint8List privateKeyBytes = await File('privKey521.txt').readAsBytes();
+  Uint8List publicKeyBytes = await File('pubKey521.txt').readAsBytes();
 
-  var message = Uint8List.fromList([0x03]);
+  Uint8List message = Uint8List.fromList([0x03]);
 
-  var ed521 = TwistedEdwardCurve.ed521();
+  TwistedEdwardCurve ed521 = TwistedEdwardCurve.ed521();
 
-  var privateKey = EdPrivateKey.generate(ed521);
+  EdPrivateKey privateKey = EdPrivateKey.generate(ed521);
   // or
   privateKey = EdPrivateKey.fromBytes(privateKeyBytes, ed521);
 
-  var signature = privateKey.sign(message);
+  Uint8List signature = privateKey.sign(message);
 
-  var publicKey = EdPublicKey.fromBytes(publicKeyBytes, ed521);
+  EdPublicKey publicKey = EdPublicKey.fromBytes(publicKeyBytes, ed521);
   //or
   publicKey = privateKey.getPublicKey();
 
-  var isValid = publicKey.verify(message, signature);
+  bool isValid = publicKey.verify(message, signature);
 
   print(isValid ? 'Is valid' : 'Is not valid');
 }
