@@ -202,25 +202,24 @@ class TwistedEdwardCurve implements Curve {
 
   @override
   Uint8List encodePoint(Point point) {
-    Uint8List pubKey = toLittleEndian(encodeBigInt(point.y, keySize));
-
+    Uint8List encodedString = toLittleEndian(encodeBigInt(point.y, keySize));
     // Encoding point
     if (point.x & BigInt.one == BigInt.one) {
-      pubKey[pubKey.length - 1] |= 0x80;
+      encodedString[encodedString.length - 1] |= 0x80;
     }
 
-    return pubKey;
+    return encodedString;
   }
 
   @override
   Point decodePoint(Uint8List encodedPoint) {
-    var eP = Uint8List.fromList(encodedPoint);
-    var size = eP.length;
-    var sign = eP[size - 1] & 0x80;
+    Uint8List eP = Uint8List.fromList(encodedPoint); // object copy
+    int size = eP.length;
+    int sign = eP[size - 1] & 0x80;
     eP[size - 1] &= ~0x80;
 
-    var y = decodeBigInt(toLittleEndian(eP));
-    var x = _xRecover(y, sign);
+    BigInt y = decodeBigInt(toLittleEndian(eP));
+    BigInt x = _xRecover(y, sign);
 
     return Point(x, y, this);
   }
