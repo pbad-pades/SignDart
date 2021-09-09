@@ -50,8 +50,7 @@ class TwistedEdwardCurve implements Curve {
 
     this.a = BigInt.from(0x01);
 
-    this.d = BigInt.parse(
-        '726838724295606890549323807888004534353641360687318060281490199180612328166730772686396383698676545930088884461843637361053498018326358');
+    this.d = BigInt.parse('-39081');
 
     this.generator = Point(
         BigInt.parse(
@@ -81,8 +80,7 @@ class TwistedEdwardCurve implements Curve {
 
     this.a = BigInt.from(0x01);
 
-    this.d = BigInt.parse(
-        '6864797660130609714981900799081393217269435300143305409394463459185543183397656052122559640661454554977296311391480858037121987999716643812574028291114681137');
+    this.d = BigInt.parse('-376014');
 
     this.generator = Point(
         BigInt.parse(
