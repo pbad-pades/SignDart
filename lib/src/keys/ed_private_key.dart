@@ -22,39 +22,50 @@ class EdPrivateKey {
   }
 
   EdPublicKey getPublicKey() {
-    var publicKeyPoint = _getPrivateScalarAndPublicPointAndSignaturePrefix()[1];
+    Uint8List h = _hashPrivateKey();
+    Uint8List leftHalf = h.sublist(0, this.curve.keySize);
 
-    var pubKey = curve.encodePoint(publicKeyPoint);
+    Uint8List s = _getPrivateScalar(leftHalf);
 
-    return EdPublicKey.fromBytes(pubKey, curve);
+    Point publicKeyPoint = _getPublicKeyPoint(s);
+
+    Uint8List A = curve.encodePoint(publicKeyPoint);
+
+    return EdPublicKey.fromBytes(A, curve);
   }
 
-  _getPrivateScalarAndPublicPointAndSignaturePrefix() {
-    Uint8List h = this._hashPrivateKey();
-    Uint8List leftHalf = h.sublist(0, this.curve.keySize);
+  Uint8List _getPrivateScalar(leftHalf) {
+    Uint8List a = _pruningBuffer(leftHalf);
+    Uint8List s = toLittleEndian(a);
+
+    return s;
+  }
+
+  Uint8List _getSignaturePrefix(h) {
     Uint8List rightHalf = h.sublist(this.curve.keySize, h.length);
 
-    Uint8List a = _pruningBuffer(leftHalf);
+    return rightHalf;
+  }
 
-    Uint8List s = toLittleEndian(a);
+  Point _getPublicKeyPoint(s) {
     Point publicKeyPoint = this.curve.generator.mul(s);
 
-    return [s, publicKeyPoint, rightHalf];
+    return publicKeyPoint;
   }
 
   Uint8List sign(Uint8List message) {
     Curve curve = this.curve;
     Point generator = curve.generator;
     BigInt order = curve.order;
-    int size = curve.signatureSize;
 
-    var result = _getPrivateScalarAndPublicPointAndSignaturePrefix();
+    Uint8List h = this._hashPrivateKey();
+    Uint8List leftHalf = h.sublist(0, this.curve.keySize);
 
-    Uint8List s = result[0];
-    Point A = result[1];
-    Uint8List prefix = result[2];
+    Uint8List s = _getPrivateScalar(leftHalf);
 
-    Uint8List eA = curve.encodePoint(A);
+    Point A = _getPublicKeyPoint(s);
+
+    Uint8List prefix = _getSignaturePrefix(h);
 
     Shake256 hash = curve.hash;
     Uint8List curveSigner;
@@ -78,20 +89,24 @@ class EdPrivateKey {
 
     BigInt rBigInt = decodeBigInt(r);
     rBigInt = rBigInt % order;
-    r = encodeBigInt(rBigInt, size);
+
+    r = encodeBigInt(rBigInt, curve.signatureSize);
 
     Point pointR = generator.mul(r);
 
     Uint8List R = curve.encodePoint(pointR);
 
     // Compute S
+    Uint8List eA = curve.encodePoint(A);
+
     hash.update(curveSigner);
     hash.update(R);
     hash.update(eA);
     hash.update(message);
-    Uint8List k = hash.digest(size);
+    Uint8List k = hash.digest(curve.signatureSize);
 
     k = toLittleEndian(k);
+
     BigInt reducedK = decodeBigInt(k) % order;
     Uint8List S = encodeBigInt(
         (decodeBigInt(r) + (reducedK * decodeBigInt(s))) % order,
