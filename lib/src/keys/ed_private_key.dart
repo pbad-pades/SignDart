@@ -125,16 +125,15 @@ class EdPrivateKey {
     return h;
   }
 
-  Uint8List _pruningBuffer(Uint8List a) {
-    if (this.curve.curveName == 'Ed448' || 
-        this.curve.curveName == 'Ed521') {
-      a[0] &= 0xFC;
-      a[a.length - 1] = 0;
-      a[a.length - 2] |= 0x80;
+  Uint8List _pruningBuffer(Uint8List buffer) {
+    if (this.curve.curveName == 'Ed448' || this.curve.curveName == 'Ed521') {
+      buffer[0] &= 0xFC;
+      buffer[buffer.length - 1] = 0;
+      buffer[buffer.length - 2] |= 0x80;
     } else {
       throw Exception("Curve not supported");
     }
 
-    return a;
+    return buffer;
   }
 }

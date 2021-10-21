@@ -111,7 +111,6 @@ main() {
           isValid = publicKey.verify(message, differentSignature);
 
           expect(isValid, false);
-
         }
       }
     });

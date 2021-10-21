@@ -49,13 +49,13 @@ main() {
           });
 
           test('Verifying fails when using different public key', () {
-              EdPublicKey differentPublicKey = EdPublicKey.fromBytes(
-                  ed521PublicKeyVector[
-                      (i + 1) % (ed521PublicKeyVector.length - 1)],
-                  ed521);
-              bool isSignatureValid =
-                  differentPublicKey.verify(message, signature);
-              expect(isSignatureValid, false);
+            EdPublicKey differentPublicKey = EdPublicKey.fromBytes(
+                ed521PublicKeyVector[
+                    (i + 1) % (ed521PublicKeyVector.length - 1)],
+                ed521);
+            bool isSignatureValid =
+                differentPublicKey.verify(message, signature);
+            expect(isSignatureValid, false);
           });
         });
       }
