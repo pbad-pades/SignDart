@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:signdart/signdart.dart';
+import 'package:sign_dart/sign_dart.dart';
 
 main() async {
   Uint8List privateKeyBytes = await File('privKey448.txt').readAsBytes();
