@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:signdart/signdart.dart';
+import 'package:sign_dart/sign_dart.dart';
 import 'package:test/test.dart';
 
 import 'test_vector.dart';
@@ -111,7 +111,6 @@ main() {
           isValid = publicKey.verify(message, differentSignature);
 
           expect(isValid, false);
-
         }
       }
     });

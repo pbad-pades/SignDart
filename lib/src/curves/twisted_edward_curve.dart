@@ -104,7 +104,8 @@ class TwistedEdwardCurve implements Curve {
     // a * x^2 + y^2 ≡ 1 + d * x^2 * y^2
 
     BigInt left = (this.a * (P.x * P.x) + (P.y * P.y)) % this.field;
-    BigInt right = (BigInt.one + this.d * (P.x * P.x) + (P.y * P.y)) % this.field;
+    BigInt right =
+        (BigInt.one + this.d * (P.x * P.x) + (P.y * P.y)) % this.field;
 
     return left == right;
   }
