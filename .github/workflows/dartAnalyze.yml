@@ -8,7 +8,7 @@ name: SignDartAnalyze
 on:
   push:
     branches-ignore:
-      - master
+      - main
 
 jobs:
   build:
