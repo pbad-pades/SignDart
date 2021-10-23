@@ -1,4 +1,7 @@
-name: signdart
+name: sign_dart
+version: 1.0.0
+description: Pure Dart library for elliptic curve research and practical application. EdDSA, Ed448, Ed521.
+repository: https://github.com/pbad-pades/SignDart
 environment:
   sdk: '>=2.13.0 <3.0.0'
 

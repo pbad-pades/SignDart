@@ -7,9 +7,6 @@
 
 build/
 
-libmupdf/libdartffiedmupdf.so
-libmupdf/mupdf/build
-libmupdf/mupdf/dart
 package_config.json
 # Files and directories created by pub
 .packages
