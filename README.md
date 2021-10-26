@@ -10,18 +10,15 @@ There are two ways to build this project
 The recommended way to clone is:
 
 ```
-git clone git@github.com:pbad-pades/SignDart.git
+git clone https://github.com/pbad-pades/SignDart.git
 ```
 
 ### As dart package
-To use this project as dart package, it is necessary to add this repository as dependecy of `pubspec.yaml` using the cli branch.
-It is recommended to use SSH keys, like:
+To use this project as dart package, it is necessary to add this repository as dependecy of `pubspec.yaml` using the cli branch, like:
 
 ```
 dependencies:
-  dartffiedlibdecaf:
-    git:
-      url: https://github.com/pbad-pades/SignDart.git
+  sign_dart: ^1.0.0
 ```
 After, run 
 ```
@@ -36,10 +33,21 @@ After that it is possible to use the library normally.
 
 You will find a set of examples.
 
+### example/ed448_example.dart
+
+This example create a public and private key, sign and verify a message using the Ed448 algorithm.
+OBS: Do not use the given private key for any other purpose.
+
+Usage:   
+At example directory
+```
+dart ed521_example.dart
+```
+
 ### example/ed521_example.dart
 
 This example create a public and private key, sign and verify a message using the Ed521 algorithm.
-OBS: Do not use the private key give for any other purpose.
+OBS: Do not use the given private key for any other purpose.
 
 Usage:   
 At example directory
